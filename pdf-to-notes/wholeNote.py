@@ -25,8 +25,8 @@ def extract_images_from_pdf(pdf_path, output_folder):
             image_ext = base_image["ext"]
             image = Image.open(io.BytesIO(image_bytes))
 
-            # Save image to the attachments folder with a unique name
-            image_output_path = f"{attachments_folder}/page_{page_number+1}_image_{image_index+1}.{image_ext}"
+            # Save image to the attachments folder with a simple name
+            image_output_path = f"{attachments_folder}/page_{page_number + 1}.{image_ext}"
             image.save(image_output_path)
 
     pdf_document.close()
@@ -39,7 +39,7 @@ def convert_pdf_to_images(pdf_path, output_folder):
 
     pages = convert_from_path(pdf_path)
     for i, page in enumerate(pages):
-        image_path = f"{attachments_folder}/page_{i+1}.png"
+        image_path = f"{attachments_folder}/page_{i + 1}.png"  # Save as PNG for vector graphics
         page.save(image_path, 'PNG')
 
 def extract_text_and_bullet_points(pdf_path):
@@ -80,10 +80,9 @@ def create_markdown(pdf_path, output_folder):
             # Adding the title
             md_file.write(f"# {data['title']}\n\n")
             
-            # Adding the corresponding image
-            image_file = f"attachments/page_{page_number + 1}.png"  # Image corresponding to the page
-            image_path = os.path.join(output_folder, image_file)
-            md_file.write(f"![Image for {data['title']}]({image_path})\n\n")
+            # Adding the corresponding image reference in Obsidian format
+            image_file = f"page_{page_number + 1}"  # Image reference without extension
+            md_file.write(f"![[{image_file}.png]]\n\n")
             
             # Adding the extracted text content
             md_file.write(f"{data['content']}\n\n")
