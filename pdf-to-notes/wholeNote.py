@@ -4,8 +4,13 @@ import os
 from pdf2image import convert_from_path
 from PIL import Image
 
+# Main execution
+pdf_path = "C:\\Users\\Nikol\\Downloads\\lecture 7.pdf"
+output_folder = "C:\\Users\\Nikol\\Downloads\\lecture7-filtered"
+subfolder = "attachments-lecture7-IDS"
+
 def extract_images_from_pdf(pdf_path, output_folder):
-    attachments_folder = os.path.join(output_folder, "attachments")
+    attachments_folder = os.path.join(output_folder, subfolder)
     
     # Create output folders if they don't exist
     os.makedirs(attachments_folder, exist_ok=True)
@@ -32,7 +37,7 @@ def extract_images_from_pdf(pdf_path, output_folder):
     pdf_document.close()
 
 def convert_pdf_to_images(pdf_path, output_folder):
-    attachments_folder = os.path.join(output_folder, "attachments")
+    attachments_folder = os.path.join(output_folder, subfolder)
     
     # Create output folder for attachments if it doesn't exist
     os.makedirs(attachments_folder, exist_ok=True)
@@ -93,10 +98,6 @@ def create_markdown(pdf_path, output_folder):
                 for point in data['bullet_points']:
                     md_file.write(f"- {point}\n")
             md_file.write("\n---\n\n")
-
-# Main execution
-pdf_path = "C:\\Users\\Nikol\\Downloads\\lecture 7.pdf"
-output_folder = "C:\\Users\\Nikol\\Downloads\\lecture7-filtered"
 
 # Create output folder for images and markdown
 if not os.path.exists(output_folder):
