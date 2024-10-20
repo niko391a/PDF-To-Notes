@@ -5,11 +5,12 @@ from pdf2image import convert_from_path
 from PIL import Image
 
 def extract_images_from_pdf(pdf_path, output_folder):
-    pdf_document = fitz.open(pdf_path)
+    attachments_folder = os.path.join(output_folder, "attachments")
     
-    # Create output folder if it doesn't exist
-    if not os.path.exists(output_folder):
-        os.makedirs(output_folder)
+    # Create output folders if they don't exist
+    os.makedirs(attachments_folder, exist_ok=True)
+
+    pdf_document = fitz.open(pdf_path)
     
     # Iterate through the pages of the PDF
     for page_number in range(len(pdf_document)):
@@ -24,16 +25,21 @@ def extract_images_from_pdf(pdf_path, output_folder):
             image_ext = base_image["ext"]
             image = Image.open(io.BytesIO(image_bytes))
 
-            # Save image to the output folder with a unique name
-            image_output_path = f"{output_folder}/page_{page_number+1}_image_{image_index+1}.{image_ext}"
+            # Save image to the attachments folder with a unique name
+            image_output_path = f"{attachments_folder}/page_{page_number+1}_image_{image_index+1}.{image_ext}"
             image.save(image_output_path)
 
     pdf_document.close()
 
 def convert_pdf_to_images(pdf_path, output_folder):
+    attachments_folder = os.path.join(output_folder, "attachments")
+    
+    # Create output folder for attachments if it doesn't exist
+    os.makedirs(attachments_folder, exist_ok=True)
+
     pages = convert_from_path(pdf_path)
     for i, page in enumerate(pages):
-        image_path = f"{output_folder}/page_{i+1}.png"
+        image_path = f"{attachments_folder}/page_{i+1}.png"
         page.save(image_path, 'PNG')
 
 def extract_text_and_bullet_points(pdf_path):
@@ -75,7 +81,7 @@ def create_markdown(pdf_path, output_folder):
             md_file.write(f"# {data['title']}\n\n")
             
             # Adding the corresponding image
-            image_file = f"page_{page_number + 1}.png"  # Image corresponding to the page
+            image_file = f"attachments/page_{page_number + 1}.png"  # Image corresponding to the page
             image_path = os.path.join(output_folder, image_file)
             md_file.write(f"![Image for {data['title']}]({image_path})\n\n")
             
