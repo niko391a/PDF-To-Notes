@@ -5,9 +5,9 @@ from pdf2image import convert_from_path
 from PIL import Image
 
 # Main execution
-pdf_path = "C:\\Users\\Nikol\\Downloads\\IDBS - Lecture 8.pdf"
-output_folder = "C:\\Users\\Nikol\\Downloads\\IDBS - Lecture 8-filtered"
-subfolder = "attachments-lecture8-IDBS"
+pdf_path = "C:\\Users\\Nikol\\Downloads\\IDBS - Lecture 11.pdf"
+output_folder = "C:\\Users\\Nikol\\Downloads\\IDBS - Lecture 11-filtered"
+subfolder = "attachments-IDBS - Lecture 11"
 
 def extract_images_from_pdf(pdf_path, output_folder):
     attachments_folder = os.path.join(output_folder, subfolder)
@@ -44,7 +44,7 @@ def convert_pdf_to_images(pdf_path, output_folder):
 
     pages = convert_from_path(pdf_path)
     for i, page in enumerate(pages):
-        image_path = f"{attachments_folder}/page_{i + 1}.png"  # Save as PNG for vector graphics
+        image_path = f"{attachments_folder}/page_{i + 1 }{subfolder}.png"  # Save as PNG for vector graphics
         page.save(image_path, 'PNG')
 
 def extract_text_for_all_pages(pdf_path):
@@ -82,7 +82,7 @@ def create_markdown(pdf_path, output_folder):
             md_file.write(f"# {data['title']}\n\n")
             
             # Adding the corresponding image reference in Obsidian format
-            image_file = f"page_{page_number + 1}"  # Image reference without extension
+            image_file = f"page_{page_number + 1 }{subfolder}"  # Image reference without extension
             md_file.write(f"![[{image_file}.png]]\n\n")
             
             # Adding the extracted text content
